@@ -1,0 +1,46 @@
+name: my-awesome-app
+
+on:
+  push:
+    branches:
+      - pre-production
+
+env:
+  # NEXUS_DOCKER_REGISTRY: sdevang/my-awesome-app
+  DOCKERHUB_IMAGE_NAME: sdevang/my-awesome-app
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: generate-env-vars
+      run: |
+        TAG=$(cat VERSION)
+        echo "export TAG=$TAG" > .variables
+        echo "export DOCKERHUB_IMAGE_WITH_TAG=$DOCKERHUB_IMAGE_NAME:$TAG" >> .variables
+
+    - name: build-docker-image
+      run: |
+        source .variables
+        docker build . -t $DOCKERHUB_IMAGE_WITH_TAG
+        echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        docker push $DOCKERHUB_IMAGE_WITH_TAG
+
+    # - name: deploy-to-production
+    #   run: |
+    #     source .variables
+    #     git clone https://sdevang:${{ secrets.GITHUB_TOKEN }}@github.com/sdevang/my-awesome-project-cd.git
+    #     git config --global user.email "kloudy@so.energy"
+    #     git config --global user.name "GitHub Runner"
+    #     git checkout -B master
+    #     cd my-awesome-project-cd/deployments/overlay/production
+    #     kustomize edit set image $NEXUS_IMAGE_NAME=$NEXUS_IMAGE_WITH_TAG
+    #     cat kustomization.yaml
+    #     git commit -am 'Production image update'
+    #     git push origin master
