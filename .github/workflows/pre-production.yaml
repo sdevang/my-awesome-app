@@ -39,7 +39,7 @@ jobs:
         git config --global user.email "kloudy@so.energy"
         git config --global user.name "GitHub Runner"
         git checkout -B pre-production
-        cd my-awesome-project-cd/deployments/overlay/pre-production
+        cd my-awesome-app-cd/deployments/overlay/pre-production
         kustomize edit set image $DOCKERHUB_IMAGE_NAME=$DOCKERHUB_IMAGE_WITH_TAG
         git commit -am 'Pre-Production image update'
         git push origin pre-production
