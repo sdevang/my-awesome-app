@@ -35,7 +35,7 @@ jobs:
     - name: deploy-to-pre-production
       run: |
         source .variables
-        git clone https://sdevang:${{ secrets.GITHUB_TOKEN }}@github.com/sdevang/my-awesome-project-cd.git
+        git clone https://sdevang:${{ secrets.GITHUB_TOKEN }}@github.com/sdevang/my-awesome-app-cd.git
         git config --global user.email "kloudy@so.energy"
         git config --global user.name "GitHub Runner"
         git checkout -B pre-production
