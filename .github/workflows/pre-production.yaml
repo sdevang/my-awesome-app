@@ -42,9 +42,4 @@ jobs:
         cd my-awesome-app-cd/deployments/overlay/pre-production
         kustomize edit set image $DOCKERHUB_IMAGE_NAME=$DOCKERHUB_IMAGE_WITH_TAG
         git commit -am 'Pre-Production image update'
-
-    - name: GitPush
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: "pre-production"
+        git push origin pre-production
