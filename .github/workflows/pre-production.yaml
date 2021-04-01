@@ -36,7 +36,7 @@ jobs:
       run: |
         source .variables
         git clone https://sdevang:${{ secrets.PAT }}@github.com/sdevang/my-awesome-app-cd.git
-        git config --global user.email "kloudy@so.energy"
+        git config --global user.email "dev@gocloudify.com"
         git config --global user.name "GitHub Runner"
         git checkout -B pre-production
         cd my-awesome-app-cd/deployments/overlay/pre-production
