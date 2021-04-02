@@ -31,8 +31,9 @@ jobs:
         git clone https://sdevang:${{ secrets.PAT }}@github.com/sdevang/my-awesome-app-cd.git
         git config --global user.email "dev@gocloudify.com"
         git config --global user.name "GitHub Runner"
+        cd my-awesome-app-cd
         git checkout -B production
-        cd my-awesome-app-cd/deployments/overlay/production
+        cd deployments/overlay/production
         kustomize edit set image $DOCKERHUB_IMAGE_NAME=$DOCKERHUB_IMAGE_WITH_TAG
         git commit -am 'Production image update'
         git push origin production
