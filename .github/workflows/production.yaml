@@ -3,16 +3,17 @@ name: my-awesome-app
 on:
   push:
     branches:
-      - master
+      - production
 
 env:
-  NEXUS_DOCKER_REGISTRY: docker.app.gocloudify.com
-  NEXUS_IMAGE_NAME: docker.app.gocloudify.com/my-awesome-app
+  # NEXUS_DOCKER_REGISTRY: sdevang/my-awesome-app
+  DOCKERHUB_IMAGE_NAME: sdevang/my-awesome-app
+
 jobs:
   build:
     name: build
     runs-on: ubuntu-20.04
-    timeout-minutes: 3
+    timeout-minutes: 10
     steps:
 
     - name: Checkout
@@ -22,24 +23,16 @@ jobs:
       run: |
         TAG=$(cat VERSION)
         echo "export TAG=$TAG" > .variables
-        echo "export NEXUS_IMAGE_WITH_TAG=$NEXUS_IMAGE_NAME:$TAG" >> .variables
-
-    - name: build-docker-image
-      run: |
-        source .variables
-        docker build . -t $NEXUS_IMAGE_WITH_TAG
-        echo "${{ secrets.NEXUS_PASSWORD }}" | docker login $NEXUS_DOCKER_REGISTRY -u "${{ secrets.NEXUS_USERNAME }}" --password-stdin
-        docker push $NEXUS_IMAGE_WITH_TAG
+        echo "export DOCKERHUB_IMAGE_WITH_TAG=$DOCKERHUB_IMAGE_NAME:$TAG" >> .variables
 
     - name: deploy-to-production
       run: |
         source .variables
-        git clone https://sdevang:${{ secrets.GITHUB_TOKEN }}@github.com/sdevang/my-awesome-project-cd.git
-        git config --global user.email "kloudy@so.energy"
+        git clone https://sdevang:${{ secrets.PAT }}@github.com/sdevang/my-awesome-app-cd.git
+        git config --global user.email "dev@gocloudify.com"
         git config --global user.name "GitHub Runner"
-        git checkout -B master
-        cd my-awesome-project-cd/deployments/overlay/production
-        kustomize edit set image $NEXUS_IMAGE_NAME=$NEXUS_IMAGE_WITH_TAG
-        cat kustomization.yaml
+        git checkout -B production
+        cd my-awesome-app-cd/deployments/overlay/production
+        kustomize edit set image $DOCKERHUB_IMAGE_NAME=$DOCKERHUB_IMAGE_WITH_TAG
         git commit -am 'Production image update'
-        git push origin master
+        git push origin production
