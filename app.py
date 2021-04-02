@@ -10,7 +10,7 @@ def wrap_html(message):
         <body>
             <div style='font-size:50px;'>
             <center>
-                <image height="700" width="800" src="https://pbs.twimg.com/media/EELwF3rWkAERB8e?format=jpg&name=small">
+                <image height="700" width="800" src="https://devhumor.com/content/uploads/images/February2016/programmers-light-bulb.jpg">
                 <br>
                 {0}<br>
             </center>
