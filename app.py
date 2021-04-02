@@ -10,8 +10,7 @@ def wrap_html(message):
         <body>
             <div style='font-size:50px;'>
             <center>
-                <image height="700" width="800" src="https://i.chzbgr.com/full/9195087104/h1C1CF3CA/programmer-meme-text-weeks-of-programming-can-save-you-hours-of-planning
-">
+                <image height="700" width="800" src="https://i.imgur.com/VzEhqoJ.jpg">
                 <br>
                 {0}<br>
             </center>
